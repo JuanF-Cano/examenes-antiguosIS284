@@ -1,6 +1,6 @@
 /* 
 - Fecha de publicación: 23/09/2024
-- Hora de publicación: 2:36 am
+- Hora de publicación: 5:20 pm
 - Versión de su código: 1.0
 - Autor. Ing(c): Juan Fernando Cano Duque
 - Nombre del lenguaje utilizado: C
