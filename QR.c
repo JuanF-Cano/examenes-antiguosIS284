@@ -1,7 +1,7 @@
 /* 
 - Fecha de publicación: 23/09/2024
 - Hora de publicación: 5:20 pm
-- Versión de su código: 2.0
+- Versión de su código: 1.2
 - Autor. Ing(c): Juan Fernando Cano Duque
 - Nombre del lenguaje utilizado: C
 - Versión del lenguaje utilizado: C11
@@ -145,7 +145,7 @@ int main() { // Inicio función prinipal
     }
 
     // Imprimir los requisitos y resultados
-    printf("\nRequisitos:\na) Los p%cxeles de la periferia est%cn siempre en blanco\nb) El c%cdigo tiene reservados un cuadrado de 7x7 p%cxeles encajado en la parte más externa superior derecha (sin incluir la periferia), que debe estar formado por al menos 25 p%cxeles negros, con cualquier disposici%Cn\n", 161, 160, 162, 161, 161, 162);
-    printf("c) En la s%cptima fila (sub%cndice 6 de la figura), las columnas en la figura 2, 4, y 25 del arreglo son p%cxeles de color negro. \nCualquier producto que no cumpla los tres requisitos anteriores se considera falsificado. El n%cmero de errores se calcular%c teniendo en cuenta solo el %cltimo requisito (c), asignando un punto por cada p%cxel de los citados que no sea negro.\n", 130, 161, 161, 163, 169, 163, 161);
+    printf("\nRequisitos:\na) Los p%cxeles de la periferia est%cn siempre en blanco\nb) El c%cdigo tiene reservados un cuadrado de 7x7 p%cxeles encajado en la parte mas externa superior derecha (sin incluir la periferia), que debe estar formado por al menos 25 p%cxeles negros, con cualquier disposici%Cn\n", 161, 160, 162, 161, 161, 162);
+    printf("c) En la s%cptima fila (sub%cndice 6 de la figura), las columnas en la figura 2, 4, y 25 del arreglo son p%cxeles de color negro. \nCualquier producto que no cumpla los tres requisitos anteriores se considera falsificado. El n%cmero de errores se calcular%c teniendo en cuenta solo el %cltimo requisito (c), asignando un punto por cada p%cxel de los citados que no sea negro.\n", 130, 161, 161, 163, 160, 163, 161);
     printf("Condici%cn a: Se cumple\nCondici%cn b: %s. N%cmero de pixeles negros = %i\nCondici%cn c: %s.\nErrores: %i %s", 162, 162, conditionB, 163, nBlackPixels, 162, conditionC, nErrors, errors);
 }
