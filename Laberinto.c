@@ -1,7 +1,7 @@
 /* 
 - Fecha de publicación: 23/09/2024
 - Hora de publicación: 2:36 am
-- Versión de su código: 2cd ..0
+- Versión de su código: 1.1
 - Autor. Ing(c): Juan Fernando Cano Duque
 - Nombre del lenguaje utilizado: C
 - Versión del lenguaje utilizado: C11
