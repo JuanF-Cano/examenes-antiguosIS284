@@ -1,7 +1,7 @@
 /* 
 - Fecha de publicación: 23/09/2024
 - Hora de publicación: 2:36 am
-- Versión de su código: 1.0
+- Versión de su código: 2cd ..0
 - Autor. Ing(c): Juan Fernando Cano Duque
 - Nombre del lenguaje utilizado: C
 - Versión del lenguaje utilizado: C11
@@ -51,21 +51,22 @@ int ExplorePath(char maze[30][30], int x, int y, int exit, int mov[4][2], int ac
 
         // Intenta otros movimientos (giro en el laberinto)
         for (int j = 1; j < 4; j++) {
-            int newMov = (actualMov + j) % 4; // Cambia el movimiento
-            movX = x + mov[newMov][0];
-            movY = y + mov[newMov][1];
+            actualMov = (actualMov + 1) % 4; // Cambia el movimiento
+            movX = x + mov[actualMov][0];
+            movY = y + mov[actualMov][1];
 
             // Verifica si la nueva posición es un espacio vacío
             if (maze[movY][movX] == 32) {
                 maze[y][x] = 184; // Marca la posición actual
                 // Llama recursivamente para explorar la nueva posición
-                if (ExplorePath(maze, movX, movY, exit, mov, newMov, count + 1)) {
+                if (ExplorePath(maze, movX, movY, exit, mov, actualMov, count + 1)) {
                     return 1; // Se encontró un camino
                 }
             }
         }
         // Desmarca la posición si no se encontró un camino
         maze[y][x] = '0';
+        count--;
     }
     return 0; // No se encontró un camino
 } // Fin función ExplorePath
