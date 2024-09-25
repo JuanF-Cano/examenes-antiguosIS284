@@ -95,7 +95,7 @@ int main() {
     } 
     printf("\n"); // Imprime nueva línea para el orden en consola
     
-    int mov[4][2] = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}}; // Definición de los movimientos: derecha, abajo, izquierda, arriba
+    int mov[4][2] = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}}; // Definición de los movimientos: abajo, derecha, arriba, izquierda
 
     // Inicia la exploración del laberinto desde la posición (0, 0)
     if (ExplorePath(maze, 0, 0, exit, mov, 0, 0)) {
