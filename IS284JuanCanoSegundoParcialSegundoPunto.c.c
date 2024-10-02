@@ -28,109 +28,138 @@
     el ASCII 120(x) para rellenar los rectángulos.
 */
 
-#include <stdio.h>   // Librería estándar de entrada/salida, se usa para imprimir en consola.
-#include <stdlib.h>  // Librería estándar de utilidades, se usa para las funciones rand() y srand() para generar números aleatorios.
-#include <time.h>    // Librería para manejar el tiempo, se utiliza para obtener la hora actual y como semilla en srand()
+#include <stdio.h>   // Librería estándar de entrada/salida.
+#include <stdlib.h>  // Librería estándar de utilidades.
+#include <time.h>    // Librería para manejar el tiempo.
 
-// Función que cambia los caracteres internos de los rectángulos por x para luego imprimirlo
-void MakeRectangle(int x1, int x2, int y1, int y2, char screen[30][60]) {
-    for (int i = y1; i <= y2; i++) { // Iteramos desde la fila más arriba hasta la más abajo
-        for (int j = x1; j <= x2; j++) { // Iteramos desde la columna más a la izquierda hasta la más a la derecha
-            // Si el caracter es unn punto lo cambia por una x, sino lo deja con la letra "o"
-            if (screen[i][j] == 46) { 
-                screen[i][j] = 120;
-            }
-        }
+void fillScreen(int row, int col, char screen[30][60]) {
+    // Caso base: cuando se ha completado la última fila
+    if (row == 30) {
+        return;
     }
-} // Fin función MakeRectangle
 
-// Función recursiva para recorrer la pantalla y rellenar los rectángulos con 'x'
-void FillScreenRecursive(char screen[30][60], int r, int c) {
-    if (r < 30) { // Verificamos que no hemos llegado al final de las filas
-        if (c < 60) { // Verificamos que no hemos llegado al final de las columnas
-            screen[r][c] = 46; // Llena de puntos toda la pantalla
-            int corner = rand() % 20; // Genera un número aleatorio entre 0 y 19 para poner una "o" cuando sea 0
-            if (!corner) {
-                screen[r][c] = 111; // Coloca 'o' si corner es 0
-            }
-            printf("%c", screen[r][c]); // Imprimimos en pantalla el caracter en la posición actual
-            FillScreenRecursive(screen, r, c + 1); // Llamada recursiva para la siguiente columna
-        } else {
-            printf("\n"); // Salto de línea cuando se llena una fila
-            FillScreenRecursive(screen, r + 1, 0); // Llamada recursiva para la siguiente fila
-        }
+    // Llena la pantalla con puntos (.) y coloca una 'o' aleatoriamente
+    screen[row][col] = '.';
+    if (rand() % 22 == 0) {
+        screen[row][col] = 'o';
+    }
+    printf("%c", screen[row][col]);
+
+    // Caso base: cuando se ha completado la última columna de una fila
+    if (col == 59) {
+        printf("\n");
+        fillScreen(row + 1, 0, screen); // Avanzamos a la siguiente fila
+    } else {
+        fillScreen(row, col + 1, screen); // Avanzamos a la siguiente columna
     }
 }
 
-// Función que va a determinar cuando hay un rectángulo con el punto mandado como parametro y en donde
-// Devuelve 1 o 0 dependiendo de si hay o no un rectángulo asociado al punto
-int FindRectangle(char screen[30][60], int x, int y, int rectangle[3][2]) {
-    int i = x + 1; // Iniciamos la variable i con el valor de x + 1 para iterar sobre la fila y revisar cada punto
-    int j = y + 1; // Inciiamos la variable j con el valor de y + 1 para iterar en cada posición de la fila
+void makeRectangle(int x1, int x2, int y1, int y2, char screen[30][60], int i, int j) {
+    // Caso base: hemos terminado la fila actual
+    if (i > y2) {
+        return;
+    }
 
-    // Cambiamos el valor de i hasta que se encuentra otro caracter 111(o) o hasta que llegue al borde de la pantalla
-    while (screen[y][i] != 111 && i < 59) i++; 
-    // revisamos si hay un caracter en ese punto, ya que i toma el valor del límite de la pantalla cuando no encuentra otra "o"
-    if (screen[y][i] == 111) {
-        // Cambia el valor de j hasta que encuentre otro caracter 111(o) o hasta que llegue al borde de la pantalla
-        while (screen[j][i] != 111 && j < 29) j++;
-        // revisamos si hay un caracter en ese punto, ya que j toma el valor del límite de la pantalla cuando no encuentra otra "o"
-        // Además se pregunta si en el punto i j hay un 111(o) ya que eso significaría que hay un cuadrado
-        if (screen[j][i] == 111 && screen[j][x] == 111) {
-            MakeRectangle(x, i, y, j, screen); // Llamada a la función MakeRectangle para rellenar el cuadrado encontrado
-            // Revisamos si el área del rectángulo encontrado es menor al área del último cuadrado encontrado 
-            if ((i - x) * (j - y) < (rectangle[1][0] - rectangle[0][0]) * (rectangle[2][1] - rectangle[1][1])) {
-                // Guardamos Las coordenadas de las esquinas 1, 2 y 3 del nuevo rectangulo
-                rectangle[0][0] = x;
-                rectangle[0][1] = y;
-                rectangle[1][0] = i;
-                rectangle[1][1] = y;
-                rectangle[2][0] = i;
-                rectangle[2][1] = j;
-                return 1;
-            }
+    // Cambia los puntos por 'x', si no es una esquina 'o'
+    if (j <= x2) {
+        if (screen[i][j] == '.') {
+            screen[i][j] = 'x';
+        }
+        makeRectangle(x1, x2, y1, y2, screen, i, j + 1); // Avanzamos a la siguiente columna
+    } else {
+        makeRectangle(x1, x2, y1, y2, screen, i + 1, x1); // Avanzamos a la siguiente fila
+    }
+}
+
+int findRectangle(char screen[30][60], int x, int y, int rectangle[3][2], int i, int j) {
+    // Caso base: hemos llegado al límite de la pantalla
+    if (i >= 60 || j >= 30) {
+        return 0;
+    }
+
+    // Caso base: encontramos una esquina
+    if (screen[y][i] == 'o' && screen[j][i] == 'o' && screen[j][x] == 'o') {
+        makeRectangle(x, i, y, j, screen, y, x); // Rellenamos el rectángulo
+        // Calcula el área y comprueba si es el rectángulo más pequeño
+        if ((i - x) * (j - y) < (rectangle[1][0] - rectangle[0][0]) * (rectangle[2][1] - rectangle[1][1])) {
+            rectangle[0][0] = x;
+            rectangle[0][1] = y;
+            rectangle[1][0] = i;
+            rectangle[1][1] = y;
+            rectangle[2][0] = i;
+            rectangle[2][1] = j;
+            return 1;
         }
     }
-    return 0;
-} // fin función FindRectangle
+
+    // Avanza a la siguiente columna
+    if (i < 59) {
+        return findRectangle(screen, x, y, rectangle, i + 1, j);
+    }
+
+    // Avanza a la siguiente fila
+    return findRectangle(screen, x, y, rectangle, x + 1, j + 1);
+}
+
+int checkScreen(int r, int c, char screen[30][60], int rectangle[3][2], int *area) {
+    // Caso base: si terminamos de recorrer todas las filas
+    if (r == 30) {
+        return *area;
+    }
+
+    // Si encontramos una esquina 'o', buscamos un rectángulo
+    if (screen[r][c] == 'o') {
+        if (findRectangle(screen, c, r, rectangle, c + 1, r + 1)) {
+            *area = (rectangle[1][0] - rectangle[0][0] + 1) * (rectangle[2][1] - rectangle[1][1] + 1);
+        }
+    }
+
+    // Continuar con la siguiente columna
+    if (c < 59) {
+        return checkScreen(r, c + 1, screen, rectangle, area);
+    }
+
+    // Avanza a la siguiente fila
+    return checkScreen(r + 1, 0, screen, rectangle, area);
+}
+
+void printScreen(int r, int c, char screen[30][60]) {
+    // Caso base: si terminamos de recorrer todas las filas
+    if (r == 30) {
+        return;
+    }
+
+    printf("%c", screen[r][c]); // Imprime el carácter actual
+
+    // Continuar con la siguiente columna
+    if (c < 59) {
+        printScreen(r, c + 1, screen); // Avanzamos a la siguiente columna
+    } else {
+        printf("\n");
+        printScreen(r + 1, 0, screen); // Avanzamos a la siguiente fila
+    }
+}
 
 int main() {
-    srand(time(NULL)); // Inicializa la semilla para la generación aleatoria
-    char screen[30][60]; // Iniciamos la matriz 60 x 30 en la que se va a guardar la pantalla con los cuadrados
-    int rectangle[3][2] = {{0, 0}, {59, 0}, {59, 59}}; // La variable rectangle guarda 3 coordenadas, correspondientes a las esquinas 
-    // 1, 2 y 3 de toda la pantalla, para que el área siempre sea mayor al área del primer rectángulo encontrado
-    int area = 0; // Se inicializa la variable área con 0, que será en la que se guarde el valor del área calculada de rectángulo menor
+    srand(time(NULL)); // Inicializa la semilla para números aleatorios
+    char screen[30][60]; // Pantalla de 60 columnas y 30 filas
+    int rectangle[3][2] = {{0, 0}, {59, 0}, {59, 29}}; // Coordenadas de las esquinas del rectángulo más pequeño
+    int area = 0; // Inicializa el área en 0
 
-    FillScreenRecursive(screen, 0, 0); // Llama a la función recursiva para llenar la pantalla con caracteres
+    fillScreen(0, 0, screen); // Llenar e imprimir la pantalla con puntos y esquinas 'o'
+    printf("\n");
 
-    printf("\n"); // Salto de línea para el orden en la consola
+    // Revisa la pantalla para buscar rectángulos
+    checkScreen(0, 0, screen, rectangle, &area);
 
-    // Se recorre la matriz para evaluar si con los puntos se generan rectángulos
-    for (int r = 0; r < 30; r++) {
-        for (int c = 0; c < 60; c++) {
-            if (screen[r][c] == 111) { // Cuando encuentre una letra "o" evalúa si hay un rectángulo
-                if (FindRectangle(screen, c, r, rectangle)) { 
-                    // Si se encuentra un rectángulo y este es menor a al anterior encontrado se calcula y guarda el área en la variable area
-                    area = (rectangle[1][0] - rectangle[0][0] + 1) * (rectangle[2][1] - rectangle[1][1] + 1);
-                }
-            }
-        }
-    }
-
-    // Si se encontró un rectángulo, se imprime la pantalla y el mensaje del menor rectángulo encontrado
+    // Si se ha encontrado algún rectángulo, imprime la pantalla actualizada y el área del más pequeño
     if (area) {
-        // Vuelve a imprimir la pantalla con los rectángulos encontrados rellenos
-        for (int r = 0; r < 30; r++) {
-            for (int c = 0; c < 60; c++) {
-                printf("%c", screen[r][c]);
-            }
-            printf("\n"); // Salto de linea cada 30 caracteres
-        }
-        // Se imprime el mensaje con las dimensiones del rectángulo más pequeño encontrado y su área
+        printScreen(0, 0, screen); // Imprimir la pantalla actualizada
         printf("\nEl %crea del m%cs peque%co seria %i x %i\nArea = %i\n", 160, 160, 164, 
         rectangle[1][0] - rectangle[0][0] + 1, rectangle[2][1] - rectangle[1][1] + 1, area);
     } else {
-        printf("\nNo se ha encontrado ningun rectangulo.");
+        printf("No se ha encontrado ningun rectangulo.\n");
     }
+
     return 0;
 }
