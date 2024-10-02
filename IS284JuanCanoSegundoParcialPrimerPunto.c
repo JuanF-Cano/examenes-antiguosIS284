@@ -134,21 +134,31 @@ void Graphing(char graph[26][101], double evaluation[101][2], double dom, double
     }
 
     // Etiquetas para el eje Y
-    for (int k = 0; k <= 5; k++) { 
-        double yValue = minY + k * (ran / 5); // Calculamos el valor de Y
-        char yLabel[20] = "                    "; // Inicializamos el string con espacios 
-        sprintf(yLabel, "%.2f", yValue); // Formateamos la cadena con el valor de y yValue
-        int yPos = (int)round(fabs(maxY - yValue) * 24 / ran);  // Buscamos la posición para poner y
-        if (yPos >= 0 && yPos < 26) { // Si la posición está dentro de los límites guarda el texto en la matriz
-            for (int l = 0; l < 20 && yLabel[l] != '\0'; l++) { // Itera hasta que llega al final de la cadena
-                if (zeroX < 5) { // Cuando la ordenada esté a la izquierda de la pantalla, guarda las etiquetas a la derecha 
-                    graph[yPos][(int)round(zeroX) + 1 + l] = yLabel[l]; 
-                } else { // En cualquier otro caso imprime las etiquetas a la izquierda de la ordenada
-                    graph[yPos][(int)round(zeroX) - 5 + l] = yLabel[ 1];
+    for (int k = 0; k <= 5; k++) {
+    double yValue = minY + k * (ran / 5); // Calculamos el valor de Y
+    char yLabel[20] = "                    "; // Inicializamos el string con espacios 
+    sprintf(yLabel, "%.2f", yValue); // Formateamos la cadena con el valor de y yValue
+    int yPos = (int)round(fabs(maxY - yValue) * 24 / ran);  // Buscamos la posición para poner y
+
+    if (yPos >= 0 && yPos < 26) { // Si la posición está dentro de los límites guarda el texto en la matriz
+        for (int l = 0; l < 20 && yLabel[l] != '\0'; l++) { // Itera hasta que llega al final de la cadena
+            if (zeroX < 5) { // Cuando la ordenada esté a la izquierda de la pantalla
+                if (yValue < 0) { // Cuadrante inferior izquierdo
+                    graph[yPos][(int)round(zeroX) + 1 + l] = yLabel[l]; // Etiquetas a la derecha
+                } else { // Cuadrante superior izquierdo
+                    graph[yPos][(int)round(zeroX) + 1 + l] = yLabel[l]; // Etiquetas a la derecha
+                }
+            } else { // Cuando la ordenada esté a la derecha de la pantalla
+                if (yValue < 0) { // Cuadrante inferior derecho
+                    graph[yPos][(int)round(zeroX) - 5 + l] = yLabel[l]; // Etiquetas a la izquierda
+                } else { // Cuadrante superior derecho
+                    graph[yPos][(int)round(zeroX) - 5 + l] = yLabel[l]; // Etiquetas a la izquierda
                 }
             }
         }
     }
+}
+
 }
 
 int main() {
