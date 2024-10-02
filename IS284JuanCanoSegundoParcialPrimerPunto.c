@@ -176,7 +176,7 @@ int main() {
 
     // Recive los datos de rango inicial, final e incremento para la segunda tabla
     int initial = 0, final = 0, increase = 0;
-    printf("\n\nIngrese rango incial: ");
+    printf("\n\nIngrese rango inicial: ");
     scanf("%i", &initial);
     do {
         printf("\nIngrese rango final: ");
