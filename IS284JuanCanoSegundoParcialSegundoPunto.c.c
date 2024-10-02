@@ -1,5 +1,5 @@
 /* 
-- Fecha de publicación: 24/09/2024
+- Fecha de publicación: 1/10/2024
 - Hora de publicación: 3:00 pm
 - Versión de su código: 1.0
 - Autor. Ing(c): Juan Fernando Cano Duque
