@@ -178,10 +178,14 @@ int main() {
     int initial = 0, final = 0, increase = 0;
     printf("\n\nIngrese rango incial: ");
     scanf("%i", &initial);
-    printf("Ingrese rango final: ");
-    scanf("%i", &final);
-    printf("Ingrese el incremento: ");
-    scanf("%i", &increase);
+    do {
+        printf("\nIngrese rango final: ");
+        scanf("%i", &final);
+    } while (final < initial);
+    do {
+        printf("\nIngrese el incremento: ");
+        scanf("%i", &increase);
+    } while (increase <= 0);
 
     double domain = fabs(final - initial); // Calcula el dominio de la función en decimales
     double evaluation[101][2] = {0}; // Inicializa en 0 la variable que contiene la tabla de los valores de "X" e "Y"
